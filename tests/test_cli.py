@@ -23,3 +23,19 @@ def test_expired_login_stops_before_operation():
             nitra.nitra()
         assert e.value.code == 1
         deploy_account.assert_not_called()
+
+def test_validate_does_not_need_azure_login():
+    with patch.object(sys, 'argv', ["nitra", "validate", "services-prod"]), \
+         patch.object(Subproc, 'check_azure_login') as check_azure_login, \
+         patch.object(Orchestrator, 'validate') as validate:
+        nitra.nitra()
+    check_azure_login.assert_not_called()
+    validate.assert_called_once_with("services-prod")
+
+@pytest.mark.parametrize("flag, expected", [([], False), (["--yes"], True), (["-y"], True)])
+def test_yes_flag(flag, expected):
+    with patch.object(sys, 'argv', ["nitra", "destroy-account", *flag]), \
+         patch.object(Subproc, 'check_azure_login', return_value = (0, "2026-09-29")), \
+         patch.object(Orchestrator, 'destroy_account'):
+        nitra.nitra()
+    assert nitra.orchestrator.assume_yes is expected

@@ -248,14 +248,35 @@ From the root folder of your repository run the following command:
 
 This will deploy every configuration file in the project to the appropriate subscriptions and resource groups
 
+## Usage - Validating
+
+`nitra validate` checks your project without deploying anything and without needing an Azure login, so it can run in CI on every pull request. It reports every problem it finds and exits with a non-zero code if there are any.
+
+* `nitra validate` checks the whole project
+* `nitra validate Subscription_1` checks one subscription
+* `nitra validate Subscription_1/Resource_Group_1` checks one resource group
+* `nitra validate Subscription_1/Resource_Group_1/storage_account_and_container.yaml` checks one configuration
+
+It checks:
+
+* Each configuration file: settings, `scope`, hooks and their scripts, and that `bicep_path` exists
+* Each resource group has a valid `location.yaml`
+* `Ref:` values point at configurations that exist, and there are no circular references
+* Each template compiles (`az bicep build`, which runs locally)
+* Each configuration's `params` match its template: no unknown parameters, and no required parameters missing
+* The configuration's `scope` matches the template's `targetScope`
+
+It does not check anything in Azure, such as whether subscriptions exist or you have permission to deploy.
+
 ## Usage - Destroying
 
-Destroy will NOT destroy resource groups. This is because there could be resources in a resource group not managed by an Nitra stack and we don't want to delete those along with a resource group being deleted.
+Destroy will NOT destroy resource groups. This is because there could be resources in a resource group not managed by a Nitra stack and we don't want to delete those along with a resource group being deleted.
 
 * Destroy will NOT run pre and post hooks.
 * Destroy runs in reverse dependency order: a configuration is destroyed before any configuration it references with `Ref:`, across resource groups and subscriptions within the destroy.
 * If a configuration outside the destroy still references one being destroyed, Nitra logs a warning but does not destroy it.
 * The scope of these commands is the same as the deploy commands
+* Before destroying anything, Nitra lists every stack it will destroy, in order, and whether each one deletes or detaches its resources (from `action_on_unmanage`), then asks you to type `yes`. Pass `--yes` (or `-y`) to skip the question, e.g. `nitra destroy-account --yes`. When there is no terminal to ask on, such as in CI, Nitra refuses to destroy unless `--yes` is passed.
 
 ### Destroy a single configuration
 

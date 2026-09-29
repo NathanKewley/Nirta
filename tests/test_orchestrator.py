@@ -12,6 +12,12 @@ from nitra.lib.subscription import Subscription
 from nitra.lib.hook_orchestrator import HookOrchestrator
 
 
+
+@pytest.fixture(autouse=True)
+def confirm_destroys(monkeypatch):
+    # These tests cover what is destroyed and in what order, the confirmation itself is tested in test_destroy_confirmation.py
+    monkeypatch.setattr(Orchestrator, "confirm_destroy", lambda self, destroy_order: None)
+
 orchestrator = Orchestrator()
 
 def test_get_deployment_name():

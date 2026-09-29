@@ -11,6 +11,7 @@ from nitra.lib.subscription import Subscription
 from nitra.lib.hook_orchestrator import HookOrchestrator
 from nitra.lib import hooks
 from nitra.lib.reference import InvalidReference, is_reference, parse_reference
+from nitra.lib.validator import Validator
 
 CONFIG_KEYS = {"bicep_path", "scope", "params", "action_on_unmanage", "deny_settings_mode", "pre_hooks", "post_hooks", "redeploy_as_dependency"}
 SCOPES = ("resource_group", "subscription")
@@ -30,6 +31,8 @@ class Orchestrator():
         self.reference_checked = set()
         # Configs explicitly asked for in this run, these are always deployed even when also reached as a dependency
         self.targets = set()
+        # Set by --yes, skips the confirmation before destroying
+        self.assume_yes = False
 
     def get_deployment_name(self, configuration):
         return configuration.replace("/",".")[:-5]
@@ -62,14 +65,21 @@ class Orchestrator():
         self.logger.error(f"Invalid configuration: {path}\n{problems}")
         sys.exit(1)
 
-    def load_yaml(self, path):
+    def read_yaml(self, path):
+        # Returns (data, error) rather than exiting, so validate can report every broken file
         if not os.path.isfile(path):
-            self.config_error(path, ["file not found"])
+            return None, "file not found"
         try:
             with open(path) as file:
-                return yaml.safe_load(file)
+                return yaml.safe_load(file), None
         except yaml.YAMLError as e:
-            self.config_error(path, [f"invalid YAML: {e}"])
+            return None, f"invalid YAML: {e}"
+
+    def load_yaml(self, path):
+        data, error = self.read_yaml(path)
+        if error:
+            self.config_error(path, [error])
+        return data
 
     def validate_config(self, path, config, deploy_mode):
         if not isinstance(config, dict):
@@ -368,9 +378,35 @@ class Orchestrator():
         # Check every config before destroying anything, so a bad file cannot stop a destroy part way through
         for configuration in configurations:
             self.load_config(configuration, deploy_mode="destroy")
+        if not configurations:
+            self.logger.info("Nothing to destroy")
+            return
         self.warn_about_remaining_dependents(configurations)
-        for configuration in self.get_destroy_order(configurations):
+        destroy_order = self.get_destroy_order(configurations)
+        self.confirm_destroy(destroy_order)
+        for configuration in destroy_order:
             self.deploy(configuration, deploy_mode="destroy")
+
+    def confirm_destroy(self, destroy_order):
+        effects = {
+            "deleteResources": "deletes its resources",
+            "deleteAll": "deletes its resources and resource groups",
+            "detachAll": "detaches its resources, they are kept",
+        }
+        lines = []
+        for number, configuration in enumerate(destroy_order, 1):
+            action = self.load_config(configuration, deploy_mode="destroy").get("action_on_unmanage", "deleteResources")
+            lines.append(f"  {number}. {configuration} ({effects.get(action, action)})")
+        self.logger.warning(f"Destroying {len(destroy_order)} stack(s), in this order:\n" + "\n".join(lines))
+        if self.assume_yes:
+            return
+        # CI and other non interactive runs must opt in explicitly, they are never left waiting for input
+        if not sys.stdin.isatty():
+            self.logger.error("Refusing to destroy without confirmation as there is no terminal to ask on, pass --yes to confirm")
+            sys.exit(1)
+        if input("Type 'yes' to destroy these stacks: ").strip() != "yes":
+            self.logger.error("Destroy cancelled, nothing was destroyed")
+            sys.exit(1)
 
     def destroy(self, configuration):
         self.destroy_configurations([configuration])
@@ -383,3 +419,6 @@ class Orchestrator():
 
     def destroy_account(self):
         self.destroy_configurations(self.collect_configurations())
+
+    def validate(self, path=None):
+        return Validator(self).validate(path)

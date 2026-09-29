@@ -1,5 +1,4 @@
 import json
-import os
 import sys
 
 from nitra.lib.logger import Logger as logger
@@ -28,27 +27,11 @@ class Validator():
         self.problems.setdefault(path, []).append(problem)
 
     def validate(self, path=None):
-        if not os.path.isdir("configuration"):
-            self.logger.error("No configuration folder found, run nitra from the root of your project")
-            sys.exit(1)
-        configurations = self.get_configurations(path)
+        configurations = self.orchestrator.resolve_scope(path)
         for configuration in configurations:
             self.validate_configuration(configuration)
         self.find_circular_references(configurations)
         return self.report(configurations)
-
-    def get_configurations(self, path):
-        # Nothing validates the whole project, otherwise a subscription, resource group or single config
-        if path is None:
-            return self.orchestrator.collect_configurations()
-        path = path.strip("/")
-        if path.endswith(".yaml"):
-            return [path]
-        parts = path.split("/")
-        if len(parts) > 2 or not os.path.isdir(os.path.join("configuration", path)):
-            self.logger.error(f"Nothing to validate at configuration/{path}, expected a subscription, resource group or configuration file")
-            sys.exit(1)
-        return self.orchestrator.collect_configurations(*parts)
 
     def validate_configuration(self, configuration):
         path = f"configuration/{configuration}"

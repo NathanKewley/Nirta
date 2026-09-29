@@ -109,6 +109,27 @@ class Subproc():
         result = self._run(command)
         return result.returncode, result.stdout
 
+    def what_if_group(self, bicep, resource_group, parameters_file, subscription_id):
+        # Azure calculates what the deployment would change, nothing is changed
+        return self.run_command_output_or_error([
+            "az", "deployment", "group", "what-if",
+            "--resource-group", resource_group,
+            "--template-file", f"bicep/{bicep}",
+            "--parameters", f"@{parameters_file}",
+            "--subscription", subscription_id,
+            "--no-pretty-print", "--output", "json"
+        ])
+
+    def what_if_subscription(self, bicep, location, parameters_file, subscription_id):
+        return self.run_command_output_or_error([
+            "az", "deployment", "sub", "what-if",
+            "--location", location,
+            "--template-file", f"bicep/{bicep}",
+            "--parameters", f"@{parameters_file}",
+            "--subscription", subscription_id,
+            "--no-pretty-print", "--output", "json"
+        ])
+
     def build_bicep(self, bicep):
         # Compiles the template to ARM JSON locally, it does not contact Azure
         return self.run_command_output_or_error(["az", "bicep", "build", "--file", f"bicep/{bicep}", "--stdout"])

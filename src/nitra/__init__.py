@@ -22,9 +22,11 @@ def _parse_args():
         - destroy-account: destroy all config in the account / nitra project
         - validate [path]: check config and templates without deploying, for the whole project,
           a subscription, a resource group or one config. Does not need an Azure login
+        - plan [path]: preview what a deploy would create, modify, delete or detach, without
+          changing anything or running hooks. Same paths as validate
         destroy commands list what will be destroyed and ask for confirmation, use --yes to skip it
         see GitHub for more details: https://github.com/NathanKewley/nitra """)
-    parser.add_argument('operation', nargs=1, help=argparse.SUPPRESS, choices=[ "deploy", "deploy-resource-group", "deploy-subscription", "deploy-account", "destroy", "destroy-resource-group", "destroy-subscription", "destroy-account", "validate"], metavar="operation")
+    parser.add_argument('operation', nargs=1, help=argparse.SUPPRESS, choices=[ "deploy", "deploy-resource-group", "deploy-subscription", "deploy-account", "destroy", "destroy-resource-group", "destroy-subscription", "destroy-account", "validate", "plan"], metavar="operation")
     parser.add_argument('suboperation', nargs='?', default=None, help=argparse.SUPPRESS)
     parser.add_argument('-y', '--yes', action='store_true', help="destroy without asking for confirmation, e.g. in CI")
     args = parser.parse_args()

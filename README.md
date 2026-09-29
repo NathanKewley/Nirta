@@ -268,6 +268,30 @@ It checks:
 
 It does not check anything in Azure, such as whether subscriptions exist or you have permission to deploy.
 
+## Usage - Planning
+
+`nitra plan` previews what a deploy would change, without changing anything and without running hooks. It takes the same paths as `validate`: the whole project, a subscription, a resource group or one configuration.
+
+```
+services-prod/rg-nitra-sample-01/nitra_automation_storage.yaml (stack services-prod.rg-nitra-sample-01.nitra_automation_storage)
+  + Microsoft.Storage/storageAccounts/nitrastorekew
+  ~ Microsoft.Storage/storageAccounts/nitrastorekew/blobServices/default/containers/nitraautomation
+      ~ properties.publicAccess: "None" => "Blob"
+  - Microsoft.Network/networkSecurityGroups/old (no longer in the template, the stack deletes it)
+  = 2 unchanged
+
+Plan: 1 to create, 1 to modify, 1 to delete, 2 unchanged
+```
+
+`+` create, `~` modify, `-` delete, `=` unchanged. It uses Azure's what-if for what each template would create or modify, and compares with each stack's current resources to show what the stack would delete (or detach, with `action_on_unmanage: detachAll`) because it is no longer in the template, which what-if does not report on its own.
+
+Some things cannot be previewed, and are listed as such:
+
+* A configuration that takes a `Ref:` output from a stack that is not deployed yet, since that output does not exist until it is deployed. Refs to deployed stacks use their current outputs, which may change if that stack is redeployed in the same run.
+* A configuration whose resource group does not exist yet, as what-if needs it to exist.
+
+What-if can report changes to some properties that will not really change (noise), check anything unexpected in the Azure portal before deploying.
+
 ## Usage - Destroying
 
 Destroy will NOT destroy resource groups. This is because there could be resources in a resource group not managed by a Nitra stack and we don't want to delete those along with a resource group being deleted.

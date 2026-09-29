@@ -12,6 +12,7 @@ from nitra.lib.hook_orchestrator import HookOrchestrator
 from nitra.lib import hooks
 from nitra.lib.reference import InvalidReference, is_reference, parse_reference
 from nitra.lib.validator import Validator
+from nitra.lib.planner import Planner
 
 CONFIG_KEYS = {"bicep_path", "scope", "params", "action_on_unmanage", "deny_settings_mode", "pre_hooks", "post_hooks", "redeploy_as_dependency"}
 SCOPES = ("resource_group", "subscription")
@@ -420,5 +421,24 @@ class Orchestrator():
     def destroy_account(self):
         self.destroy_configurations(self.collect_configurations())
 
+    def resolve_scope(self, path):
+        # Nothing means the whole project, otherwise a subscription, resource group or single config
+        if not os.path.isdir("configuration"):
+            self.logger.error("No configuration folder found, run nitra from the root of your project")
+            sys.exit(1)
+        if path is None:
+            return self.collect_configurations()
+        path = path.strip("/")
+        if path.endswith(".yaml"):
+            return [path]
+        parts = path.split("/")
+        if len(parts) > 2 or not os.path.isdir(os.path.join("configuration", path)):
+            self.logger.error(f"Nothing found at configuration/{path}, expected a subscription, resource group or configuration file")
+            sys.exit(1)
+        return self.collect_configurations(*parts)
+
     def validate(self, path=None):
         return Validator(self).validate(path)
+
+    def plan(self, path=None):
+        return Planner(self).plan(path)

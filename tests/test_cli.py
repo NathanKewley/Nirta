@@ -39,3 +39,11 @@ def test_yes_flag(flag, expected):
          patch.object(Orchestrator, 'destroy_account'):
         nitra.nitra()
     assert nitra.orchestrator.assume_yes is expected
+
+def test_plan_needs_azure_login():
+    with patch.object(sys, 'argv', ["nitra", "plan", "services-prod"]), \
+         patch.object(Subproc, 'check_azure_login', return_value = (0, "2026-09-29")) as check_azure_login, \
+         patch.object(Orchestrator, 'plan') as plan:
+        nitra.nitra()
+    check_azure_login.assert_called_once()
+    plan.assert_called_once_with("services-prod")

@@ -90,10 +90,14 @@ class Deployer():
         self.logger.debug(f"Deployment Parameters: {json.dumps(shown, default=str)}")
 
     def write_parameters_file(self, params, bicep):
+        return self.write_parameters(self.build_parameters(params), bicep)
+
+    def write_parameters(self, parameters, bicep):
+        # parameters are already resolved, e.g. {"name": {"value": "x"}}
         parameters_file = {
             "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
             "contentVersion": "1.0.0.0",
-            "parameters": self.build_parameters(params)
+            "parameters": parameters
         }
         self.log_parameters(parameters_file["parameters"], bicep)
         with tempfile.NamedTemporaryFile(mode="w", prefix="nitra-", suffix=".json", delete=False) as file:

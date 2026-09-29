@@ -134,7 +134,7 @@ def test_validate_unknown_path(tmp_path, monkeypatch, capfd, path):
     make_project(tmp_path, {"sub/rg/a": STORAGE})
     monkeypatch.chdir(tmp_path)
     assert validate(path)[0] == 1
-    assert "Nothing to validate at" in capfd.readouterr().err
+    assert "Nothing found at configuration/" in capfd.readouterr().err
 
 def test_no_configuration_folder(tmp_path, monkeypatch, capfd):
     monkeypatch.chdir(tmp_path)

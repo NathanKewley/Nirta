@@ -4,7 +4,8 @@ bicep_path: virtual_network/main.bicep
 params:
   name: Shared-Services-Prod
   location: australiaeast
-  addressPrefixs: "['10.0.0.0/20']"
+  addressPrefixs:
+    - 10.0.0.0/20
   firewallSubnetName: AzureFirewallSubnet
   firewallSubnetAddressPrefix: '10.0.3.0/26'
   vpnSubnetName: Shared-Services-VPN

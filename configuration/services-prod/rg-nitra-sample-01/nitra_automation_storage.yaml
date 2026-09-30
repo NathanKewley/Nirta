@@ -6,8 +6,8 @@ pre_hooks:
 
 params:
   location: australiaeast
-  storageName: azuritestorekew
-  containerName: azuriteautomation
+  storageName: nitrastorekew
+  containerName: nitraautomation
   skuName: Standard_LRS
 
 post_hooks:

@@ -1,7 +1,7 @@
 {
-    "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-azurite-sample-01/providers/Microsoft.Resources/deployments/azurite-sample.rg-azurite-sample-01.azurite_automation_account",
+    "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-nitra-sample-01/providers/Microsoft.Resources/deployments/nitra-sample.rg-nitra-sample-01.nitra_automation_account",
     "location": null,
-    "name": "azurite-sample.rg-azurite-sample-01.azurite_automation_account",
+    "name": "nitra-sample.rg-nitra-sample-01.nitra_automation_account",
     "properties": {
       "correlationId": "8fe2fa86-0b9b-4c10-977b-612f4801c16e",
       "debugSetting": null,
@@ -12,15 +12,15 @@
       "onErrorDeployment": null,
       "outputResources": [
         {
-          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-azurite-sample-01/providers/Microsoft.Automation/automationAccounts/azuriteAutomation",
-          "resourceGroup": "rg-azurite-sample-01"
+          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-nitra-sample-01/providers/Microsoft.Automation/automationAccounts/nitraAutomation",
+          "resourceGroup": "rg-nitra-sample-01"
         }
       ],
       "outputs": null,
       "parameters": {
         "appName": {
           "type": "String",
-          "value": "azuriteAutomation"
+          "value": "nitraAutomation"
         },
         "location": {
           "type": "String",
@@ -61,7 +61,7 @@
       "timestamp": "2021-04-25T06:35:24.501561+00:00",
       "validatedResources": null
     },
-    "resourceGroup": "rg-azurite-sample-01",
+    "resourceGroup": "rg-nitra-sample-01",
     "tags": null,
     "type": "Microsoft.Resources/deployments"
 }

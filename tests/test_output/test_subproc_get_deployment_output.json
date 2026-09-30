@@ -1,7 +1,7 @@
 {
-    "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-azurite-sample-01/providers/Microsoft.Resources/deployments/azurite-sample.rg-azurite-sample-01.azurite_automation_storage",
+    "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-nitra-sample-01/providers/Microsoft.Resources/deployments/nitra-sample.rg-nitra-sample-01.nitra_automation_storage",
     "location": null,
-    "name": "azurite-sample.rg-azurite-sample-01.azurite_automation_storage",
+    "name": "nitra-sample.rg-nitra-sample-01.nitra_automation_storage",
     "properties": {
       "correlationId": "367fe038-eabd-4535-9be9-ba443032ecbf",
       "debugSetting": null,
@@ -9,15 +9,15 @@
         {
           "dependsOn": [
             {
-              "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-azurite-sample-01/providers/Microsoft.Storage/storageAccounts/azurisampleorekew",
-              "resourceGroup": "rg-azurite-sample-01",
+              "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-nitra-sample-01/providers/Microsoft.Storage/storageAccounts/azurisampleorekew",
+              "resourceGroup": "rg-nitra-sample-01",
               "resourceName": "azurisamplestorekew",
               "resourceType": "Microsoft.Storage/storageAccounts"
             }
           ],
-          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-azurite-sample-01/providers/Microsoft.Storage/storageAccounts/azurisampleorekew/blobServices/default/containers/azuriteautomation",
-          "resourceGroup": "rg-azurite-sample-01",
-          "resourceName": "azurisamplestorekew/default/azuriteautomation",
+          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-nitra-sample-01/providers/Microsoft.Storage/storageAccounts/azurisampleorekew/blobServices/default/containers/nitraautomation",
+          "resourceGroup": "rg-nitra-sample-01",
+          "resourceName": "azurisamplestorekew/default/nitraautomation",
           "resourceType": "Microsoft.Storage/storageAccounts/blobServices/containers"
         }
       ],
@@ -27,33 +27,18 @@
       "onErrorDeployment": null,
       "outputResources": [
         {
-          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-azurite-sample-01/providers/Microsoft.Storage/storageAccounts/azurisampleorekew",
-          "resourceGroup": "rg-azurite-sample-01"
+          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-nitra-sample-01/providers/Microsoft.Storage/storageAccounts/azurisampleorekew",
+          "resourceGroup": "rg-nitra-sample-01"
         },
         {
-          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-azurite-sample-01/providers/Microsoft.Storage/storageAccounts/azurisampleorekew/blobServices/default/containers/azuriteautomation",
-          "resourceGroup": "rg-azurite-sample-01"
+          "id": "/subscriptions/26e348d8-f84d-41ec-9c5f-3c866bbc0e58/resourceGroups/rg-nitra-sample-01/providers/Microsoft.Storage/storageAccounts/azurisampleorekew/blobServices/default/containers/nitraautomation",
+          "resourceGroup": "rg-nitra-sample-01"
         }
       ],
-      "outputs": {
-        "storageEndpoint": {
-          "type": "Object",
-          "value": {
-            "blob": "https://azurisampleorekew.blob.core.windows.net/",
-            "file": "https://azurisampleorekew.file.core.windows.net/",
-            "queue": "https://azurisampleorekew.queue.core.windows.net/",
-            "table": "https://azurisampleorekew.table.core.windows.net/"
-          }
-        },
-        "storageLocation": {
-          "type": "String",
-          "value": "australiaeast"
-        }
-      },
       "parameters": {
         "containerName": {
           "type": "String",
-          "value": "azuriteautomation"
+          "value": "nitraautomation"
         },
         "location": {
           "type": "String",
@@ -111,7 +96,22 @@
       "timestamp": "2021-05-01T03:21:15.146105+00:00",
       "validatedResources": null
     },
-    "resourceGroup": "rg-azurite-sample-01",
+      "outputs": {
+        "storageEndpoint": {
+          "type": "Object",
+          "value": {
+            "blob": "https://azurisampleorekew.blob.core.windows.net/",
+            "file": "https://azurisampleorekew.file.core.windows.net/",
+            "queue": "https://azurisampleorekew.queue.core.windows.net/",
+            "table": "https://azurisampleorekew.table.core.windows.net/"
+          }
+        },
+        "storageLocation": {
+          "type": "String",
+          "value": "australiaeast"
+        }
+      },
+    "resourceGroup": "rg-nitra-sample-01",
     "tags": null,
     "type": "Microsoft.Resources/deployments"
 }  

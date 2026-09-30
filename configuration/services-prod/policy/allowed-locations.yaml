@@ -6,4 +6,6 @@ params:
   policyDisplayName: allowed-locations
   policyAssignmentName: allowed_locations
   enforcementMode: Default
-  allowedLocations: "['australiaeast','australiasoutheast']"
+  allowedLocations:
+    - australiaeast
+    - australiasoutheast

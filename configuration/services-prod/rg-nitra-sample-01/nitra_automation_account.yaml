@@ -4,6 +4,6 @@ action_on_unmanage: deleteResources
 deny_settings_mode: None
 
 params:
-  location: Ref:services-prod.rg-azurite-sample-01.azurite_automation_storage:storageLocation
-  appName: azuriteAutomation
+  location: Ref:services-prod.rg-nitra-sample-01.nitra_automation_storage:storageLocation
+  appName: nitraAutomation
   skuName: Free

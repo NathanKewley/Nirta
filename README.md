@@ -4,7 +4,7 @@ Nitra is an Azure Bicep orchestration tool. The main goal is to separate environ
 
 There is some additional getting started info in the [wiki](https://github.com/NathanKewley/nitra/wiki)
 
-There is also a sample project with some examples of usage [here](https://github.com/NathanKewley/azurite-sample-project)
+There is also a sample project with some examples of usage [here](https://github.com/NathanKewley/nitra-sample-project)
 
 ## Goals
 
